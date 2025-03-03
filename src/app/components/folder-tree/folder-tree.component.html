@@ -1,0 +1,11 @@
+<ng-container *ngIf="folders$ | async as folders">
+    <app-folder-actions [activeFolder]="folders[1]"></app-folder-actions>
+
+    <p-tree
+        [value]="folders[0]"
+        styleClass="w-full md:w-[30rem]"
+        selectionMode="single"
+        [(selection)]="selected"
+        (click)="toggleActive()"
+    ></p-tree>
+</ng-container>
