@@ -1,0 +1,3 @@
+<ng-container *ngIf="activeFolder$ | async as activeFolder">
+    <app-file-list [files]="activeFolder?.data?.files || []"></app-file-list>
+</ng-container>

@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { TreeNode } from 'primeng/api';
 
-export const DEFAULT_NUMBER_FOR_GENERATE_TREE = 50;
+export const NUMBER_FOR_GEN = 50;
 
 @Injectable({
     providedIn: 'root',
@@ -30,6 +30,20 @@ export class FolderService {
             collapsedIcon: 'pi pi-folder',
             key: Math.random().toString(),
             children: [],
+            data: {
+                files: [
+                    {
+                        label: 'Файл 1',
+                        icon: 'pi pi-file',
+                        key: Math.random().toString(),
+                    },
+                    {
+                        label: 'Файл 2',
+                        icon: 'pi pi-file',
+                        key: Math.random().toString(),
+                    },
+                ],
+            },
         },
     ];
 
@@ -43,6 +57,8 @@ export class FolderService {
     activeFolderFiles$ = this.activeFolderFilesSubject.asObservable();
 
     setActiveFolder(folder: TreeNode | null) {
+        console.log(folder);
+
         this.activeFolderSubject.next(folder);
     }
 
@@ -65,7 +81,7 @@ export class FolderService {
     generateRandomFolders(): TreeNode[] {
         const folders: any[] = [];
 
-        for (let i = 1; i <= 50; i++) {
+        for (let i = 1; i <= NUMBER_FOR_GEN; i++) {
             const key = Math.random().toString().slice(2);
             const folder = {
                 label: `Папка ${key}`,
@@ -80,12 +96,38 @@ export class FolderService {
         return folders;
     }
 
+    generateRandomFiles(): TreeNode[] {
+        const files: any[] = [];
+
+        for (let i = 1; i <= NUMBER_FOR_GEN; i++) {
+            const key = Math.random().toString().slice(2);
+            const folder = {
+                label: `Файл ${key}`,
+                icon: 'pi pi-file',
+                key: key,
+            };
+            files.push(folder);
+        }
+        return files;
+    }
+
     generateTree(activeNodeId: string) {
         const current = this.folders.getValue();
         const node = this.findNodeByKey(current, activeNodeId);
         if (node) {
             node.children = node.children?.length ? [...node.children, ...this.generateRandomFolders()] : [...this.generateRandomFolders()];
             console.log(node, current);
+
+            this.folders.next(current);
+        }
+    }
+
+    generateFiles(activeNodeId: string) {
+        const current = this.folders.getValue();
+        const node = this.findNodeByKey(current, activeNodeId);
+        if (node) {
+            const files = node.data?.files?.length ? [...node.data.files, ...this.generateRandomFiles()] : [...this.generateRandomFiles()];
+            node.data = { files: [...files] };
 
             this.folders.next(current);
         }

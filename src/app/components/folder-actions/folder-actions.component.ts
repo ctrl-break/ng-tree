@@ -16,11 +16,18 @@ export class FolderActionsComponent {
     @Input() activeFolder: TreeNode | null = null;
 
     generateFolders() {
-        console.log(this.activeFolder);
-
         if (!this.activeFolder) {
+            alert('Выберите папку');
             return;
         }
         this.folderService.generateTree(this.activeFolder.key!);
+    }
+
+    generateFiles() {
+        if (!this.activeFolder) {
+            alert('Выберите папку');
+            return;
+        }
+        this.folderService.generateFiles(this.activeFolder.key!);
     }
 }

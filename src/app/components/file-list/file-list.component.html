@@ -1,0 +1,8 @@
+<br />
+
+<div class="list" *ngFor="let file of files">
+    <div class="file-item">
+        <i [ngClass]="file.icon"></i>
+        <span>{{ file.label }}</span>
+    </div>
+</div>
