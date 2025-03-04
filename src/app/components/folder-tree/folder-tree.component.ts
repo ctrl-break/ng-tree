@@ -26,6 +26,14 @@ export class FolderTreeComponent {
     }
 
     onNodeDrop(event: TreeNodeDropEvent) {
-        console.log(event);
+        if (event.dropNode?.type === 'file') {
+            return;
+        }
+
+        if (event.originalEvent?.ctrlKey || event.originalEvent?.shiftKey) {
+            this.folderService.cloneNode(event);
+        } else {
+            this.folderService.moveNode(event);
+        }
     }
 }

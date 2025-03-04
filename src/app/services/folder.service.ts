@@ -2,6 +2,7 @@ import { inject, Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { TreeNode } from 'primeng/api';
 import { HelpersService } from './helpers.service';
+import { TreeNodeDropEvent } from 'primeng/tree';
 
 export const NUMBER_FOR_GEN = 50;
 
@@ -76,5 +77,63 @@ export class FolderService {
         node.label = label;
         node.icon = icon;
         this.tree.next(current);
+    }
+
+    moveNode(event: TreeNodeDropEvent) {
+        if (!event.dragNode?.key || !event.dropNode?.key) {
+            return;
+        }
+        const currentTree = this.tree.getValue();
+        const { key } = event.dragNode;
+        const { key: newParentKey } = event.dropNode;
+        const nodeToMove = this.findNodeByKey(currentTree, key);
+
+        if (!nodeToMove) {
+            return;
+        }
+
+        const oldParent = nodeToMove.parent;
+        if (oldParent) {
+            oldParent.children?.splice(oldParent.children.indexOf(nodeToMove), 1);
+        } else {
+            currentTree.splice(currentTree.indexOf(nodeToMove), 1);
+        }
+
+        const newParent = this.findNodeByKey(currentTree, newParentKey);
+        if (newParent) {
+            newParent.children?.push(nodeToMove);
+            newParent.children?.sort(this.helpers.sortByType);
+        } else {
+            currentTree.push(nodeToMove);
+            currentTree.sort(this.helpers.sortByType);
+        }
+
+        this.tree.next(currentTree);
+    }
+
+    cloneNode(event: TreeNodeDropEvent) {
+        if (!event.dragNode?.key || !event.dropNode?.key) {
+            return;
+        }
+        const currentTree = this.tree.getValue();
+        const { key } = event.dragNode;
+        const { key: newParentKey } = event.dropNode;
+        const nodeToMove = this.findNodeByKey(currentTree, key);
+
+        if (!nodeToMove) {
+            return;
+        }
+
+        const clone = this.helpers.cloneTreeWithNewKeys(nodeToMove);
+        const newParent = this.findNodeByKey(currentTree, newParentKey);
+        if (newParent) {
+            newParent.children?.push(clone);
+            newParent.children?.sort(this.helpers.sortByType);
+        } else {
+            currentTree.push(clone);
+            currentTree.sort(this.helpers.sortByType);
+        }
+
+        this.tree.next(currentTree);
     }
 }

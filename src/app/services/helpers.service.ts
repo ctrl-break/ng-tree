@@ -72,4 +72,15 @@ export class HelpersService {
             children: [],
         };
     }
+
+    cloneTreeWithNewKeys(node: TreeNode): TreeNode {
+        const newNode: TreeNode = {
+            key: Math.random().toString().slice(2),
+            label: node.label,
+            icon: node.icon,
+            type: node.type,
+            children: node.children ? node.children.map((child) => this.cloneTreeWithNewKeys(child)) : undefined,
+        };
+        return newNode;
+    }
 }
