@@ -2,58 +2,56 @@
 
 This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.1.7.
 
-## Development server
+---
 
-To start a local development server, run:
+[Demo](https://venerable-wisp-c1220a.netlify.app/)
 
-```bash
-ng serve
-```
+## **Overview**
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+This is a test task for an Angular application that manages a catalog structure with folders and items. The application consists of two main panels:
 
-## Code scaffolding
+- A **left panel** displaying a hierarchical tree of folders and subfolders.
+- A **right panel** serving as an editor for modifying folder and item properties.
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+![Screenshot](./src/assets/screen.png)
 
-```bash
-ng generate component component-name
-```
+## **Features**
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+### **1. Folder & Item Management**
 
-```bash
-ng generate --help
-```
+- The left panel allows users to create folders and items.
+- Two buttons are available:
+    - **"Create 50 items"** – generates 50 items with random names in the selected folder.
+    - **"Create 50 folders"** – generates 50 subfolders in the selected folder.
 
-## Building
+### **2. Drag & Drop Functionality**
 
-To build the project run:
+- Users can **move** folders and items within the tree structure using drag-and-drop.
+- **Ctrl key behavior**:
+    - Holding the **Ctrl** key while dragging **copies** items instead of moving them.
 
-```bash
-ng build
-```
+### **3. Editor Panel**
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+- The right panel provides an interface to edit folder or item properties, allowing users to:
+    - Change the **name** of a folder or item.
+    - Update the **icon** of a folder or item.
 
-## Running unit tests
+## **Installation & Setup**
 
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
-
-```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+1. Clone the repository:
+    ```sh
+    git clone https://github.com/ctrl-break/ng-tree.git
+    cd ng-tree
+    ```
+2. Install dependencies:
+    ```sh
+    npm install
+    ```
+3. Start the development server:
+    ```sh
+    npm start
+    ```
+4. Open the application in the browser:
+    ```
+    http://localhost:4200
+    ```
