@@ -41,8 +41,11 @@ export class FolderService {
         return null;
     }
 
-    generateChildren(activeNodeId: string, type: 'files' | 'folders' = 'folders') {
+    generateChildren(type: 'files' | 'folders' = 'folders', activeNodeId?: string) {
         const current = this.tree.getValue();
+        if (!activeNodeId) {
+            return this.addToRoot(type);
+        }
         const node = this.findNodeByKey(current, activeNodeId);
         if (!node) {
             return;
@@ -55,6 +58,13 @@ export class FolderService {
 
         node.children = orderedItems;
         this.tree.next(current);
+    }
+
+    addToRoot(type: 'files' | 'folders' = 'folders') {
+        const current = this.tree.getValue();
+        const newItems = this.helpers.generateRandomItems(type);
+        const orderedItems = [...current, ...newItems].sort(this.helpers.sortByType);
+        this.tree.next(orderedItems);
     }
 
     updateNode(activeNodeId: string, label: string, icon: string) {

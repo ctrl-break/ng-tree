@@ -10,20 +10,20 @@ export class HelpersService {
         {
             label: 'Папка 1',
             icon: 'pi pi-folder',
-            key: Math.random().toString(),
+            key: Math.random().toString().slice(2),
             type: 'folder',
             children: [
                 {
                     label: 'Папка 3',
                     icon: 'pi pi-folder',
-                    key: Math.random().toString(),
+                    key: Math.random().toString().slice(2),
                     type: 'folder',
                     children: [],
                 },
                 {
                     label: 'Файл 1',
                     icon: 'pi pi-file',
-                    key: Math.random().toString(),
+                    key: Math.random().toString().slice(2),
                     type: 'file',
                 },
             ],
@@ -31,7 +31,7 @@ export class HelpersService {
         {
             label: 'Папка 2',
             icon: 'pi pi-folder',
-            key: Math.random().toString(),
+            key: Math.random().toString().slice(2),
             type: 'folder',
             children: [],
         },

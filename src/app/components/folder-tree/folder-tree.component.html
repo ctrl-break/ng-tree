@@ -1,11 +1,16 @@
-<ng-container *ngIf="folders$ | async as folders">
-    <app-folder-actions [activeFolder]="folders[1]"></app-folder-actions>
+<ng-container *ngIf="nodes$ | async as nodes">
+    <app-folder-actions [activeNode]="nodes[1]"></app-folder-actions>
 
     <p-tree
-        [value]="folders[0]"
+        [value]="nodes[0]"
         styleClass="w-full md:w-[30rem]"
         selectionMode="single"
-        [(selection)]="selected"
-        (click)="toggleActive()"
+        [draggableNodes]="true"
+        [droppableNodes]="true"
+        draggableScope="self"
+        droppableScope="self"
+        (onNodeDrop)="onNodeDrop($event)"
+        (onNodeSelect)="select($event)"
+        (onNodeUnselect)="unselect()"
     ></p-tree>
 </ng-container>

@@ -15,15 +15,15 @@ export class FolderActionsComponent {
 
     NUMBER_FOR_GEN = NUMBER_FOR_GEN;
 
-    @Input() activeFolder: TreeNode | null = null;
+    @Input() activeNode: TreeNode | null = null;
 
     generateTreeNodes(type: 'files' | 'folders' = 'folders') {
-        console.log(this.activeFolder);
+        console.log(this.activeNode);
 
-        if (!this.activeFolder || this.activeFolder.type !== 'folder') {
+        if (this.activeNode?.type === 'file') {
             alert('Выберите папку');
             return;
         }
-        this.folderService.generateChildren(this.activeFolder.key!, type);
+        this.folderService.generateChildren(type, this.activeNode?.key || '');
     }
 }

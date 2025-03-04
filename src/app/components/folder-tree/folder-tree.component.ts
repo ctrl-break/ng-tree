@@ -1,6 +1,6 @@
 import { Component, inject } from '@angular/core';
-import { TreeNode } from 'primeng/api';
-import { TreeModule } from 'primeng/tree';
+import { TreeDragDropService } from 'primeng/api';
+import { TreeModule, TreeNodeDropEvent, TreeNodeSelectEvent } from 'primeng/tree';
 import { FolderService } from '../../services/folder.service';
 import { CommonModule } from '@angular/common';
 import { combineLatest, tap } from 'rxjs';
@@ -11,14 +11,21 @@ import { FolderActionsComponent } from '../folder-actions/folder-actions.compone
     imports: [CommonModule, TreeModule, FolderActionsComponent],
     templateUrl: './folder-tree.component.html',
     styleUrls: ['./folder-tree.component.scss'],
+    providers: [TreeDragDropService],
 })
 export class FolderTreeComponent {
     folderService = inject(FolderService);
-    folders$ = combineLatest([this.folderService.tree$, this.folderService.activeNode$]);
+    nodes$ = combineLatest([this.folderService.tree$, this.folderService.activeNode$]);
 
-    selected: TreeNode | null = null;
+    select(nodeEvent: TreeNodeSelectEvent) {
+        this.folderService.setActiveNode(nodeEvent.node);
+    }
 
-    toggleActive() {
-        this.folderService.setActiveNode(this.selected);
+    unselect() {
+        this.folderService.setActiveNode(null);
+    }
+
+    onNodeDrop(event: TreeNodeDropEvent) {
+        console.log(event);
     }
 }
