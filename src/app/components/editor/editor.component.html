@@ -1,0 +1,28 @@
+<p-card>
+    <form [formGroup]="form" (ngSubmit)="onSubmit()">
+        <div class="p-field">
+            <label for="label">Название</label>
+            <input id="label" type="text" pInputText formControlName="label" />
+
+            <small *ngIf="form.controls['label'].invalid && form.controls['label'].touched" class="p-error"> Введите название </small>
+        </div>
+
+        <div class="p-field">
+            <label for="icon">Выберите иконку</label>
+            <div class="card flex justify-center">
+                <p-select
+                    [options]="selectedNode?.type === 'folder' ? folderIconClasses : fileIconClasses"
+                    formControlName="icon"
+                    optionLabel="label"
+                    optionValue="value"
+                    placeholder="Выберите иконку"
+                    class="w-full md:w-56"
+                />
+
+                <i *ngIf="form.value.icon" [class]="form.value.icon" style="margin-left: 10px"></i>
+            </div>
+        </div>
+
+        <p-button type="submit" label="Применить" icon="pi pi-check" [disabled]="form.invalid"></p-button>
+    </form>
+</p-card>

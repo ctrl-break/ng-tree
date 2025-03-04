@@ -1,6 +1,7 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { TreeNode } from 'primeng/api';
+import { HelpersService } from './helpers.service';
 
 export const NUMBER_FOR_GEN = 50;
 
@@ -8,61 +9,23 @@ export const NUMBER_FOR_GEN = 50;
     providedIn: 'root',
 })
 export class FolderService {
-    private defaultFolderData: TreeNode[] = [
-        {
-            label: 'Папка 1',
-            expandedIcon: 'pi pi-folder-open',
-            collapsedIcon: 'pi pi-folder',
-            key: Math.random().toString(),
-            children: [
-                {
-                    label: 'Папка 3',
-                    expandedIcon: 'pi pi-folder-open',
-                    collapsedIcon: 'pi pi-folder',
-                    key: Math.random().toString(),
-                    children: [],
-                },
-            ],
-        },
-        {
-            label: 'Папка 2',
-            expandedIcon: 'pi pi-folder-open',
-            collapsedIcon: 'pi pi-folder',
-            key: Math.random().toString(),
-            children: [],
-            data: {
-                files: [
-                    {
-                        label: 'Файл 1',
-                        icon: 'pi pi-file',
-                        key: Math.random().toString(),
-                    },
-                    {
-                        label: 'Файл 2',
-                        icon: 'pi pi-file',
-                        key: Math.random().toString(),
-                    },
-                ],
-            },
-        },
-    ];
+    helpers = inject(HelpersService);
 
-    private folders = new BehaviorSubject<TreeNode[]>(this.defaultFolderData);
-    folders$ = this.folders.asObservable();
+    private tree = new BehaviorSubject<TreeNode[]>(this.helpers.defaultFolderData);
+    tree$ = this.tree.asObservable();
 
-    private activeFolderSubject = new BehaviorSubject<TreeNode | null>(null);
-    private activeFolderFilesSubject = new BehaviorSubject<string[]>([]);
+    private activeNodeSubject = new BehaviorSubject<TreeNode | null>(null);
+    activeNode$ = this.activeNodeSubject.asObservable();
 
-    activeFolder$ = this.activeFolderSubject.asObservable();
-    activeFolderFiles$ = this.activeFolderFilesSubject.asObservable();
-
-    setActiveFolder(folder: TreeNode | null) {
-        console.log(folder);
-
-        this.activeFolderSubject.next(folder);
+    setActiveNode(node: TreeNode | null) {
+        const active = this.findNodeByKey(this.tree.getValue(), node?.key || '');
+        this.activeNodeSubject.next(active);
     }
 
     findNodeByKey(tree: TreeNode[], key: string): TreeNode | null {
+        if (!key) {
+            return null;
+        }
         for (const node of tree) {
             if (node.key === key) {
                 return node;
@@ -78,58 +41,30 @@ export class FolderService {
         return null;
     }
 
-    generateRandomFolders(): TreeNode[] {
-        const folders: any[] = [];
-
-        for (let i = 1; i <= NUMBER_FOR_GEN; i++) {
-            const key = Math.random().toString().slice(2);
-            const folder = {
-                label: `Папка ${key}`,
-                expandedIcon: 'pi pi-folder-open',
-                collapsedIcon: 'pi pi-folder',
-                key: key,
-                children: [],
-            };
-            folders.push(folder);
-        }
-
-        return folders;
-    }
-
-    generateRandomFiles(): TreeNode[] {
-        const files: any[] = [];
-
-        for (let i = 1; i <= NUMBER_FOR_GEN; i++) {
-            const key = Math.random().toString().slice(2);
-            const folder = {
-                label: `Файл ${key}`,
-                icon: 'pi pi-file',
-                key: key,
-            };
-            files.push(folder);
-        }
-        return files;
-    }
-
-    generateTree(activeNodeId: string) {
-        const current = this.folders.getValue();
+    generateChildren(activeNodeId: string, type: 'files' | 'folders' = 'folders') {
+        const current = this.tree.getValue();
         const node = this.findNodeByKey(current, activeNodeId);
-        if (node) {
-            node.children = node.children?.length ? [...node.children, ...this.generateRandomFolders()] : [...this.generateRandomFolders()];
-            console.log(node, current);
-
-            this.folders.next(current);
+        if (!node) {
+            return;
         }
+
+        const newItems = this.helpers.generateRandomItems(type);
+        const orderedItems = node.children?.length
+            ? [...node.children, ...newItems].sort(this.helpers.sortByType)
+            : [...newItems].sort(this.helpers.sortByType);
+
+        node.children = orderedItems;
+        this.tree.next(current);
     }
 
-    generateFiles(activeNodeId: string) {
-        const current = this.folders.getValue();
+    updateNode(activeNodeId: string, label: string, icon: string) {
+        const current = this.tree.getValue();
         const node = this.findNodeByKey(current, activeNodeId);
-        if (node) {
-            const files = node.data?.files?.length ? [...node.data.files, ...this.generateRandomFiles()] : [...this.generateRandomFiles()];
-            node.data = { files: [...files] };
-
-            this.folders.next(current);
+        if (!node) {
+            return;
         }
+        node.label = label;
+        node.icon = icon;
+        this.tree.next(current);
     }
 }

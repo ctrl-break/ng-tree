@@ -25,13 +25,14 @@ app-header {
 }
 
 app-sidebar {
-    width: 500px;
+    display: flex;
+    flex: 1;
     background-color: #f4f4f4;
     padding: 10px;
 }
 
 .content {
-    flex: 1;
+    flex: 2;
     padding: 10px;
     background-color: #fff;
 }

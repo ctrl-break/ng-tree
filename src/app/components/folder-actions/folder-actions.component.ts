@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject, Input } from '@angular/core';
-import { FolderService } from '../../services/folder.service';
+import { FolderService, NUMBER_FOR_GEN } from '../../services/folder.service';
 import { TreeNode } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
 
@@ -13,21 +13,17 @@ import { ButtonModule } from 'primeng/button';
 export class FolderActionsComponent {
     folderService = inject(FolderService);
 
+    NUMBER_FOR_GEN = NUMBER_FOR_GEN;
+
     @Input() activeFolder: TreeNode | null = null;
 
-    generateFolders() {
-        if (!this.activeFolder) {
-            alert('Выберите папку');
-            return;
-        }
-        this.folderService.generateTree(this.activeFolder.key!);
-    }
+    generateTreeNodes(type: 'files' | 'folders' = 'folders') {
+        console.log(this.activeFolder);
 
-    generateFiles() {
-        if (!this.activeFolder) {
+        if (!this.activeFolder || this.activeFolder.type !== 'folder') {
             alert('Выберите папку');
             return;
         }
-        this.folderService.generateFiles(this.activeFolder.key!);
+        this.folderService.generateChildren(this.activeFolder.key!, type);
     }
 }

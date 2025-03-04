@@ -14,11 +14,11 @@ import { FolderActionsComponent } from '../folder-actions/folder-actions.compone
 })
 export class FolderTreeComponent {
     folderService = inject(FolderService);
-    folders$ = combineLatest([this.folderService.folders$, this.folderService.activeFolder$]).pipe(tap((res) => console.log(res)));
+    folders$ = combineLatest([this.folderService.tree$, this.folderService.activeNode$]);
 
     selected: TreeNode | null = null;
 
     toggleActive() {
-        this.folderService.setActiveFolder(this.selected);
+        this.folderService.setActiveNode(this.selected);
     }
 }

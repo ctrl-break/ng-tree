@@ -1,4 +1,4 @@
 <div class="actions">
-    <p-button label="gen 50 folders" (click)="generateFolders()" />
-    <p-button label="gen 50 files" (click)="generateFiles()" />
+    <p-button [label]="'+' + NUMBER_FOR_GEN + ' folders'" (click)="generateTreeNodes()" />
+    <p-button [label]="'+' + NUMBER_FOR_GEN + ' files'" (click)="generateTreeNodes('files')" />
 </div>

@@ -1,17 +1,17 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { FolderActionsComponent } from './folder-actions.component';
+import { EditorComponent } from './editor.component';
 
-describe('FolderActionsComponent', () => {
-    let component: FolderActionsComponent;
-    let fixture: ComponentFixture<FolderActionsComponent>;
+describe('EditorComponent', () => {
+    let component: EditorComponent;
+    let fixture: ComponentFixture<EditorComponent>;
 
     beforeEach(async () => {
         await TestBed.configureTestingModule({
-            imports: [FolderActionsComponent],
+            imports: [EditorComponent],
         }).compileComponents();
 
-        fixture = TestBed.createComponent(FolderActionsComponent);
+        fixture = TestBed.createComponent(EditorComponent);
         component = fixture.componentInstance;
         fixture.detectChanges();
     });

@@ -1,3 +1,5 @@
 <div class="sidebar">
-    <app-folder-tree></app-folder-tree>
+    <ng-container *ngIf="activeNode$ | async as activeNode">
+        <app-editor [activeNode]="activeNode"></app-editor>
+    </ng-container>
 </div>

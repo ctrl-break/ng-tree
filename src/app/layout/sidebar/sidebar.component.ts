@@ -1,11 +1,15 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
-import { FolderTreeComponent } from '../../components/folder-tree/folder-tree.component';
+import { Component, inject } from '@angular/core';
+import { FolderService } from '../../services/folder.service';
+import { EditorComponent } from '../../components/editor/editor.component';
 
 @Component({
     selector: 'app-sidebar',
-    imports: [CommonModule, FolderTreeComponent],
+    imports: [CommonModule, EditorComponent],
     templateUrl: './sidebar.component.html',
     styleUrls: ['./sidebar.component.scss'],
 })
-export class SidebarComponent {}
+export class SidebarComponent {
+    folderService = inject(FolderService);
+    activeNode$ = this.folderService.activeNode$;
+}
